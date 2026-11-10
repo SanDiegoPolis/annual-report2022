@@ -1,7 +1,7 @@
 # 目前只统计文字，不统计图片和其他特殊消息
 import os
 
-from extract_log import iter_log_records
+from extract_log import iter_log_records, reset_log_outputs
 
 def extract_log(log_file):
     GROUP_ID = '88888888'
@@ -88,10 +88,7 @@ def extract_log(log_file):
     #print('time:' + str(len(list_time)) + '|sender:' + str(len(list_sender)) + '|msg:' + str(len(list_msg)))
 
 if __name__ == '__main__':  
-    files_list = os.listdir('./list/')
-    for file in files_list:
-        print('deleting ' + file)
-        os.remove('./list/' + file)
+    reset_log_outputs()
 
     len_log = []
     name_list = []
