@@ -1,29 +1,36 @@
 # 目前只统计文字，不统计图片和其他特殊消息
 import os
+import re
+
+
+LOG_RECORD_START = re.compile(r'^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[^]]*\] \[[^]]+\] \[')
+
+
+def iter_log_records(log_file):
+    lines = []
+    with open(log_file, 'r', encoding='utf-8-sig') as f:
+        for line in f:
+            line = line.rstrip('\n')
+            if LOG_RECORD_START.match(line):
+                if lines:
+                    yield '\n'.join(lines)
+                lines = [line]
+            elif lines:
+                lines.append(line)
+    if lines:
+        yield '\n'.join(lines)
 
 def extract_log(log_file):
     GROUP_ID = '88888888'
     YEAR_BEGIN = '2021-01-01'
     YEAR_END = '2022-01-01'
 
-    with open(log_file, 'r', encoding='utf-8') as f:
-        msg_list = [msg.strip('\n') for msg in f.readlines()]
-
     list_time = []
     list_sender = []
     list_msg = []
     list_log = []
-    last_msg = ''
 
-    for msg in msg_list:
-
-        if (msg.startswith('[') == False): # 换行情况
-            msg = last_msg + '\n' +  msg
-            if bool(list_time): list_time.pop()
-            if bool(list_sender): list_sender.pop()
-            if bool(list_msg): list_msg.pop()
-
-        last_msg = msg
+    for msg in iter_log_records(log_file):
         short_msg = msg
         left_pos = msg.find('[')
         right_pos = msg.find(']')
