@@ -94,14 +94,12 @@ def juan():
         date_earliest.append(date_earliest_i)
         
         for i in range(len(list_sender)):
-            if (list_sender[i] == sender_id):
-                if (list_month[i] == month_latest_i and list_date[i] == date_latest_i):
-                    if (list_hour[i] > hour_latest_i):
-                        hour_latest_morning_i = list_hour[i]
-                        minute_latest_morning_i = list_minute[i]
-                        break
-                elif ((list_month[i] >= month_latest_i and list_date[i] > date_latest_i) or list_month[i] > month_latest_i): # 缩短循环
-                    break
+            if (list_sender[i] == sender_id
+                    and list_month[i] == month_latest_i and list_date[i] == date_latest_i
+                    and list_hour[i] > hour_latest_i):
+                morning_time = (list_hour[i], list_minute[i])
+                if hour_latest_morning_i == '-1' or morning_time < (hour_latest_morning_i, minute_latest_morning_i):
+                    hour_latest_morning_i, minute_latest_morning_i = morning_time
         hour_latest_morning.append(hour_latest_morning_i)
         minute_latest_morning.append(minute_latest_morning_i)
         
