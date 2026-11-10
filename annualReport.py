@@ -1,11 +1,12 @@
-import os
+import subprocess
+import sys
 from count import count as count_data
 from juan import juan
 
 if __name__ == '__main__':  
-    os.system('python ./stopwords/sort_stopwords_addition.py') # 将停用词_addition自动排序
-    os.system('python ./extract_log.py') # 提取log里面的元素
-    os.system('python ./getWordCloud.py') # 生成词云
+    subprocess.run([sys.executable, './stopwords/sort_stopwords_addition.py'], check=True) # 将停用词_addition自动排序
+    subprocess.run([sys.executable, './extract_log.py'], check=True) # 提取log里面的元素
+    subprocess.run([sys.executable, './getWordCloud.py'], check=True) # 生成词云
 
     sender, count = count_data()
     
