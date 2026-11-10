@@ -20,6 +20,16 @@ def iter_log_records(log_file):
     if lines:
         yield '\n'.join(lines)
 
+def reset_log_outputs():
+    os.makedirs('./list', exist_ok=True)
+    for filename in ('list_time.txt', 'list_sender.txt', 'list_msg.txt', 'list_log.txt'):
+        try:
+            os.remove(os.path.join('./list', filename))
+        except FileNotFoundError:
+            continue
+        print('deleting ' + filename)
+
+
 def extract_log(log_file):
     GROUP_ID = '88888888'
     YEAR_BEGIN = '2021-01-01'
@@ -108,10 +118,7 @@ def extract_log(log_file):
     #print('time:' + str(len(list_time)) + '|sender:' + str(len(list_sender)) + '|msg:' + str(len(list_msg)))
 
 if __name__ == '__main__':  
-    files_list = os.listdir('./list/')
-    for file in files_list:
-        print('deleting ' + file)
-        os.remove('./list/' + file)
+    reset_log_outputs()
 
     files_log = os.listdir('./logs/')
     for file in files_log:
